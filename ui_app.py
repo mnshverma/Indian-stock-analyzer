@@ -13,8 +13,7 @@ st.set_page_config(page_title="Manver IQ", page_icon="📈", layout="wide")
 col_logo, _ = st.columns([1, 3])
 with col_logo:
     st.image("manver_logo.png", width=120)
-st.caption("📈 Smart Stock Analysis | NSE/BSE")
-st.caption("📈 Smart Stock Analysis | NSE/BSE")
+st.caption("Manver IQ 📈 Smart Stock Analysis | NSE/BSE")
 
 st.markdown("""
 <style>
