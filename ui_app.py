@@ -10,11 +10,32 @@ from dotenv import load_dotenv
 
 st.set_page_config(page_title="Manver IQ", page_icon="📈", layout="wide")
 
-col_logo, col_title = st.columns([1, 3])
-with col_logo:
-    st.image("manver_logo.png", width=100)
-with col_title:
-    st.markdown("<div style='display:flex; flex-direction:column; justify-content:center; height:100%;'><h1 style='color:#1a237e; margin:0;'>Manver IQ</h1><small style='color:#666; margin:0;'>Smart Stock Analysis</small></div>", unsafe_allow_html=True)
+st.markdown("""
+<style>
+    .top-bar { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #1a237e, #3949ab); border-radius: 8px; margin-bottom: 0.75rem; }
+    .top-bar .logo { width: 60px; }
+    .top-bar .title { color: white; }
+    .top-bar .title h1 { margin: 0; font-size: 1.5rem; }
+    .top-bar .title small { color: #ccc; }
+    .top-bar .search { flex: 1; max-width: 300px; }
+    .top-bar .search input { width: 100%; padding: 0.5rem; border-radius: 4px; border: none; font-size: 0.9rem; }
+    .top-bar .search button { padding: 0.5rem 1rem; background: #ffc107; color: #333; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    @media (max-width: 600px) { .top-bar { flex-direction: column; text-align: center; } .top-bar .search { width: 100%; max-width: 100%; } }
+</style>
+""", unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns([1, 3, 4])
+with col1:
+    st.image("manver_logo.png", width=60)
+with col2:
+    st.markdown("<div class='title'><h1>Manver IQ</h1><small>Smart Stock Analysis</small></div>", unsafe_allow_html=True)
+with col3:
+    with st.form("search_form"):
+        c1, c2 = st.columns([4, 1])
+        with c1:
+            sym = st.text_input("", placeholder="Search (RELIANCE, TCS...)", label_visibility="collapsed", key="s")
+        with c2:
+            submitted = st.form_submit_button("🔍")
 
 st.markdown("""
 <style>
