@@ -149,7 +149,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-@st.cache_data(ttl=3600)
 def get_stock_data(symbol):
     """Get comprehensive stock data"""
     ticker = f"{symbol.upper()}.NS"
@@ -158,10 +157,9 @@ def get_stock_data(symbol):
     history = stock.history(period="2y")
     news = stock.news
     
-    return stock, info, history, news
+    return stock, info, news
 
 
-@st.cache_data(ttl=3600)
 def calculate_technical_indicators(history):
     """Calculate technical indicators"""
     close = history['Close'].copy()
@@ -404,7 +402,8 @@ def main():
     if search_btn and symbol:
         with st.spinner(f"Analyzing {symbol.upper()}..."):
             try:
-                stock, info, history, news = get_stock_data(symbol)
+                stock, info, news = get_stock_data(symbol)
+                history = stock.history(period="2y")
                 tech_data = calculate_technical_indicators(history)
                 recommendation = generate_recommendation(tech_data, info)
                 
