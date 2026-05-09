@@ -19,10 +19,14 @@ st.markdown("""
 
 st.markdown("""
 <style>
-    .app-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .app-header { display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0; }
     .app-header h1 { color: #1a237e; margin: 0; }
+    .app-header img { width: 40px; height: 40px; }
 </style>
-<div class="app-header"><h1>Manver IQ</h1></div>
+<div class="app-header">
+    <img src="manver_logo.png" alt="Logo">
+    <h1>Manver IQ</h1>
+</div>
 """, unsafe_allow_html=True)
 
 col_s1, col_s2 = st.columns([5, 1])
