@@ -383,4 +383,3 @@ if sym and submitted:
             st.error(f"Error: {e}")
 else:
     st.info("Enter a stock symbol to analyze")
-    st.markdown("**Popular:** RELIANCE, TCS, INFY, HDFCBANK, ICICIBANK, SBIN")
