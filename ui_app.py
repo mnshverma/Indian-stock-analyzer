@@ -155,7 +155,7 @@ def fmt(v):
     return f"₹{v:,.0f}"
 
 
-st.markdown('<div class="logo"><img src="manver_logo.png" alt="Manver"></div>')
+st.image("manver_logo.png", width=150)
 
 # Search with button
 with st.form("search_form"):
