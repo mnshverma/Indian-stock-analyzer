@@ -212,9 +212,7 @@ st.markdown('<div style="max-width:1200px;margin:0 auto;">', unsafe_allow_html=T
 
 st.markdown('<div class="header"><h1>🧠 Manver IQ</h1><p>Smart Stock Analysis | NSE/BSE</p></div>', unsafe_allow_html=True)
 
-st.markdown('<div class="search">', unsafe_allow_html=True)
-sym = st.text_input("Stock Symbol", placeholder="RELIANCE, TCS, HDFCBANK...", key="s")
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div class="search"><span style="font-size:1.2rem;">🔍 </span>' + st.text_input("Stock Symbol", placeholder="RELIANCE, TCS, HDFCBANK...", key="s") + '</div>', unsafe_allow_html=True)
 
 if sym:
     # Auto-run AI if API key exists (behind the scenes)
