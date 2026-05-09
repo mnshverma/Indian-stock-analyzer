@@ -214,8 +214,8 @@ if sym:
             st.markdown('<div class="metrics">', unsafe_allow_html=True)
             st.markdown(f'<div class="m"><div class="m-label">Price</div><div class="m-val">₹{p:.1f}</div><div class="m-delta {"pos" if chg>=0 else "neg"}">{chg:+.1f}%</div></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="m"><div class="m-label">MktCap</div><div class="m-val">{fmt(info.get("marketCap"))}</div></div>', unsafe_allow_html=True)
-            pe = info.get("trailingPE")
-            st.markdown(f'<div class="m"><div class="m-label">P/E</div><div class="m-val">{pe:.1f if pe else "N/A"}</div></div>', unsafe_allow_html=True)
+            pe_val = f"{pe:.1f}" if pe else "N/A"
+            st.markdown(f'<div class="m"><div class="m-label">P/E</div><div class="m-val">{pe_val}</div></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="m"><div class="m-label">52W High</div><div class="m-val">₹{info.get("fiftyTwoWeekHigh",0):.0f}</div></div>', unsafe_allow_html=True)
             st.markdown(f'<div class="m"><div class="m-label">52W Low</div><div class="m-val">₹{info.get("fiftyTwoWeekLow",0):.0f}</div></div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
