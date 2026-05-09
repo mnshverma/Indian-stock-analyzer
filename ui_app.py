@@ -212,8 +212,67 @@ if sym and submitted:
             rc = "buy" if rec["rec"] in ["STRONG BUY", "BUY"] else ("sell" if rec["rec"] == "SELL" else "hold")
             st.markdown(f'<div class="rec {rc}"><div class="rec-val">{rec["rec"]}</div><div>Target: ₹{rec["tgt"]:.0f} (+{rec["up"]:.0f}%) | Stop: ₹{rec["stop"]:.0f} (-{rec["dn"]:.0f}%)</div></div>', unsafe_allow_html=True)
 
-            t1, t2, t3, t4 = st.tabs(["Chart", "Technical", "Company", "News"])
+            t1, t2, t3, t4 = st.tabs(["📊 Overview", "📈 Technical", "🏢 Company", "📰 News"])
             with t1:
+                st.markdown("**Today's Price Action**")
+                c_p1, c_p2, c_p3, c_p4 = st.columns(4)
+                with c_p1:
+                    st.metric("Today's High", f"₹{info.get('fiftyTwoWeekHigh', 0):.0f}")
+                with c_p2:
+                    st.metric("Today's Low", f"₹{info.get('fiftyTwoWeekLow', 0):.0f}")
+                with c_p3:
+                    st.metric("Open", f"₹{info.get('open', p):.1f}")
+                with c_p4:
+                    st.metric("Prev Close", f"₹{pc:.1f}")
+                
+                c_v1, c_v2 = st.columns(2)
+                with c_v1:
+                    vol = info.get("volume", 0)
+                    st.metric("Volume", f"{vol:,.0f}" if vol else "N/A")
+                with c_v2:
+                    st.metric("Circuit", f"₹{info.get('dayLow', 0):.0f} / ₹{info.get('dayHigh', 0):.0f}")
+                
+                st.markdown("---")
+                st.markdown("**📊 Fundamentals**")
+                mc = info.get("marketCap", 0)
+                roe = info.get("returnOnEquity")
+                pe = info.get("trailingPE")
+                eps = info.get("trailingEps")
+                pb = info.get("priceToBook")
+                dy = info.get("dividendYield")
+                bv = info.get("bookValue")
+                de = info.get("debtToEquity")
+                fv = info.get("faceValue")
+                
+                c_f1, c_f2, c_f3, c_f4 = st.columns(4)
+                with c_f1:
+                    st.markdown("<small>Mkt Cap<br><b>" + fmt(mc) + "</b></small>", unsafe_allow_html=True)
+                with c_f2:
+                    st.markdown("<small>ROE<br><b>" + f"{(roe or 0)*100:.1f}%</b></small>" if roe else "<small>ROE<br><b>N/A</b></small>", unsafe_allow_html=True)
+                with c_f3:
+                    st.markdown("<small>P/E<br><b>" + f"{pe:.1f}" + "</b></small>" if pe else "<small>P/E<br><b>N/A</b></small>", unsafe_allow_html=True)
+                with c_f4:
+                    st.markdown("<small>EPS<br><b>₹" + f"{eps:.2f}" + "</b></small>" if eps else "<small>EPS<br><b>N/A</b></small>", unsafe_allow_html=True)
+                
+                c_f5, c_f6, c_f7, c_f8 = st.columns(4)
+                with c_f5:
+                    st.markdown("<small>P/B<br><b>" + f"{pb:.1f}" + "</b></small>" if pb else "<small>P/B<br><b>N/A</b></small>", unsafe_allow_html=True)
+                with c_f6:
+                    st.markdown("<small>Div Yield<br><b>" + f"{(dy or 0)*100:.1f}%" + "</b></small>" if dy else "<small>Div Yield<br><b>N/A</b></small>", unsafe_allow_html=True)
+                with c_f7:
+                    st.markdown("<small>Book Value<br><b>₹" + f"{bv:.2f}" + "</b></small>" if bv else "<small>Book Value<br><b>N/A</b></small>", unsafe_allow_html=True)
+                with c_f8:
+                    st.markdown("<small>Debt/Eq<br><b>" + f"{de:.1f}" + "</b></small>" if de else "<small>Debt/Eq<br><b>N/A</b></small>", unsafe_allow_html=True)
+                
+                st.markdown("---")
+                st.markdown("**📈 52 Week Performance**")
+                c_52_1, c_52_2 = st.columns(2)
+                with c_52_1:
+                    st.metric("52W High", f"₹{info.get('fiftyTwoWeekHigh', 0):.0f}")
+                with c_52_2:
+                    st.metric("52W Low", f"₹{info.get('fiftyTwoWeekLow', 0):.0f}")
+            
+            with t2:
                 per = st.select_slider("", ["1m", "3m", "6m", "1y", "2y"], label_visibility="collapsed")
                 st.plotly_chart(make_chart(tech, per), use_container_width=True)
             with t2:
@@ -283,7 +342,6 @@ if sym and submitted:
                 with c_v3:
                     st.markdown("Div Yield: <small>annual dividend %</small>", unsafe_allow_html=True)
                     st.metric("Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
-                    st.metric("Div Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
             with t3:
                 st.markdown(f"**{info.get('longName', sym.upper())}**")
                 st.markdown(f"Sector: {info.get('sector', 'N/A')}")
