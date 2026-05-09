@@ -32,31 +32,31 @@ with col_s2:
 
 st.markdown("""
 <style>
-    * { font-family: Arial, sans-serif; font-size: 12px; }
-    .block-container { padding: 0.5rem !important; }
-    div[data-testid="stMetric"] { background: white; padding: 0.3rem; border-radius: 4px; }
-    div[data-testid="stMetric"] label { font-size: 10px; color: #666; }
-    div[data-testid="stMetric"] .stMarkdown { font-size: 11px; font-weight: 600; }
-    .search-box input { font-size: 0.85rem; }
-    h1, h2, h3 { font-size: 1rem; }
-    p, small { font-size: 11px; }
-    .rec { padding: 0.5rem; border-radius: 6px; text-align: center; margin-bottom: 0.5rem; }
+    * { font-family: Arial, sans-serif; font-size: 11px; }
+    .block-container { padding: 0.4rem !important; }
+    div[data-testid="stMetric"] { background: white; padding: 0.25rem; border-radius: 3px; }
+    div[data-testid="stMetric"] label { font-size: 9px; color: #666; }
+    div[data-testid="stMetric"] .stMarkdown { font-size: 10px; font-weight: 600; }
+    .search-box input { font-size: 0.8rem; }
+    h1, h2, h3 { font-size: 0.9rem; }
+    p, small { font-size: 10px; }
+    .rec { padding: 0.4rem; border-radius: 5px; text-align: center; margin-bottom: 0.4rem; }
     .rec.buy { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; }
     .rec.sell { background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #f44336; }
     .rec.hold { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ffc107; }
-    .rec-val { font-size: 1rem; font-weight: 700; }
+    .rec-val { font-size: 0.9rem; font-weight: 700; }
     .rec.buy .rec-val { color: #2e7d32; }
     .rec.sell .rec-val { color: #c62828; }
     .rec.hold .rec-val { color: #f57c00; }
-    .news { padding: 0.3rem; border-left: 3px solid #1976d2; background: #f5f5f5; margin-bottom: 0.2rem; }
-    .news-t { font-size: 0.65rem; }
-    .news-s { font-size: 0.55rem; color: #888; }
-    .tag { padding: 0.15rem 0.3rem; border-radius: 10px; font-size: 0.6rem; }
+    .news { padding: 0.25rem; border-left: 3px solid #1976d2; background: #f5f5f5; margin-bottom: 0.15rem; }
+    .news-t { font-size: 0.6rem; }
+    .news-s { font-size: 0.5rem; color: #888; }
+    .tag { padding: 0.1rem 0.25rem; border-radius: 8px; font-size: 0.55rem; }
     .tag.bull { background: #c8e6c9; color: #2e7d32; }
     .tag.bear { background: #ffcdd2; color: #c62828; }
-    .ai-box { background: #e3f2fd; padding: 0.5rem; border-radius: 6px; margin-bottom: 0.5rem; border: 1px solid #1976d2; }
+    .ai-box { background: #e3f2fd; padding: 0.4rem; border-radius: 5px; margin-bottom: 0.4rem; border: 1px solid #1976d2; }
     @media (max-width: 600px) {
-        * { font-size: 11px; }
+        * { font-size: 10px; }
     }
 </style>
 """, unsafe_allow_html=True)
