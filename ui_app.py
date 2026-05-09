@@ -24,12 +24,11 @@ with col2:
     st.markdown("### Manver IQ")
     st.caption("Smart Stock Analysis")
 
-with st.form("search_form"):
-    col_s1, col_s2 = st.columns([5, 1])
-    with col_s1:
-        sym = st.text_input("", placeholder="Search stock (RELIANCE, TCS...)", label_visibility="collapsed", key="s")
-    with col_s2:
-        submitted = st.form_submit_button("🔍 Search")
+col_s1, col_s2 = st.columns([5, 1])
+with col_s1:
+    sym = st.text_input("", placeholder="Search stock (RELIANCE, TCS...)", label_visibility="collapsed", key="s")
+with col_s2:
+    submitted = st.button("🔍 Search")
 
 st.markdown("""
 <style>
@@ -174,14 +173,7 @@ def fmt(v):
     return f"₹{v:,.0f}"
 
 
-with st.form("search_form"):
-    col1, col2 = st.columns([4, 1])
-    with col1:
-        sym = st.text_input("", placeholder="Search stock (e.g. RELIANCE, TCS...)", label_visibility="collapsed", key="s")
-    with col2:
-        submitted = st.form_submit_button("🔍 Search")
-
-if sym:
+if sym and submitted:
     load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
     ai_result = run_ai_analysis(sym) if api_key else None
