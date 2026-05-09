@@ -139,6 +139,9 @@ def calculate_indicators(history):
     """Calculate technical indicators"""
     close = history['Close']
     
+    if len(close) < 2:
+        return None
+    
     # RSI
     delta = close.diff()
     gain = delta.where(delta > 0, 0).ewm(span=14, adjust=False).mean()
@@ -176,22 +179,22 @@ def calculate_indicators(history):
     atr = tr.rolling(14).mean()
     
     return {
-        "rsi": rsi.iloc[-1] if not np.isnan(rsi.iloc[-1]) else 50,
-        "rsi_prev": rsi.iloc[-5] if len(rsi) > 5 else rsi.iloc[0],
-        "macd": macd.iloc[-1],
-        "macd_signal": macd_signal.iloc[-1],
-        "macd_hist": macd.iloc[-1] - macd_signal.iloc[-1],
-        "sma20": sma20.iloc[-1],
-        "sma50": sma50.iloc[-1],
-        "sma100": sma100.iloc[-1],
-        "sma200": sma200.iloc[-1] if sma200 is not None else None,
-        "bb_upper": bb_upper.iloc[-1],
-        "bb_mid": bb_mid.iloc[-1],
-        "bb_lower": bb_lower.iloc[-1],
-        "stoch_k": stoch_k.iloc[-1],
-        "stoch_d": stoch_d.iloc[-1],
-        "atr": atr.iloc[-1],
-        "price": close.iloc[-1],
+        "rsi": rsi.iloc[-1] if len(rsi) > 0 and not np.isnan(rsi.iloc[-1]) else 50,
+        "rsi_prev": rsi.iloc[-5] if len(rsi) > 5 and not np.isnan(rsi.iloc[-5]) else 50,
+        "macd": macd.iloc[-1] if len(macd) > 0 else 0,
+        "macd_signal": macd_signal.iloc[-1] if len(macd_signal) > 0 else 0,
+        "macd_hist": (macd.iloc[-1] - macd_signal.iloc[-1]) if len(macd) > 0 else 0,
+        "sma20": sma20.iloc[-1] if len(sma20) > 0 else 0,
+        "sma50": sma50.iloc[-1] if len(sma50) > 0 else 0,
+        "sma100": sma100.iloc[-1] if len(sma100) > 0 else 0,
+        "sma200": sma200.iloc[-1] if sma200 is not None and len(sma200) > 0 else None,
+        "bb_upper": bb_upper.iloc[-1] if len(bb_upper) > 0 else 0,
+        "bb_mid": bb_mid.iloc[-1] if len(bb_mid) > 0 else 0,
+        "bb_lower": bb_lower.iloc[-1] if len(bb_lower) > 0 else 0,
+        "stoch_k": stoch_k.iloc[-1] if len(stoch_k) > 0 else 50,
+        "stoch_d": stoch_d.iloc[-1] if len(stoch_d) > 0 else 50,
+        "atr": atr.iloc[-1] if len(atr) > 0 else 0,
+        "price": close.iloc[-1] if len(close) > 0 else 0,
         "close": close,
         "high": history['High'],
         "low": history['Low'],
@@ -415,7 +418,13 @@ if symbol:
     with st.spinner(f"Analyzing {symbol.upper()}..."):
         try:
             info, history, news = get_stock_data(symbol)
+            
             tech = calculate_indicators(history)
+            
+            if not tech:
+                st.error(f"No data available for {symbol}. Please check the symbol.")
+                return
+            
             rec = get_recommendation(tech, info)
             
             price = info.get('currentPrice', 0)
@@ -512,11 +521,7 @@ if symbol:
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown("**RSI (14)**
-                    
-                    - Below 30 = Oversold (Buy)
-                    - Above 70 = Overbought (Sell)
-                    - 30-70 = Neutral")
+                    st.markdown("**RSI (14)**  \n\n- Below 30 = Oversold (Buy)  \n- Above 70 = Overbought (Sell)  \n- 30-70 = Neutral")
                     
                     rsi = tech['rsi']
                     rsi_tag = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
@@ -524,10 +529,7 @@ if symbol:
                     st.markdown(f"Current: <span class='tag {rsi_tag}'>{rsi:.1f} - {rsi_label}</span>", unsafe_allow_html=True)
                     
                     st.markdown("---")
-                    st.markdown("**MACD (12,26,9)**
-                    
-                    - MACD > Signal = Bullish
-                    - MACD < Signal = Bearish")
+                    st.markdown("**MACD (12,26,9)**  \n\n- MACD > Signal = Bullish  \n- MACD < Signal = Bearish")
                     
                     macd_tag = "bull" if tech['macd'] > tech['macd_signal'] else "bear"
                     st.markdown(f"MACD: <span class='tag {macd_tag}'>{'Bullish' if tech['macd'] > tech['macd_signal'] else 'Bearish'}</span>", unsafe_allow_html=True)
