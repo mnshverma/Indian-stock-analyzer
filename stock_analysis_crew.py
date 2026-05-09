@@ -293,8 +293,7 @@ class StockAnalysisCrew:
             tasks=tasks,
             process=process,
             manager_agent=self.agents['strategist'],
-            verbose=True,
-            memory=False
+            verbose=False
         )
         
         return self.crew

@@ -152,24 +152,8 @@ def get_rec(tech):
 
 
 def run_crewai_analysis(sym):
-    """Run CrewAI deep analysis"""
-    try:
-        import os
-        from dotenv import load_dotenv
-        load_dotenv()
-        
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            return None, "No OpenAI API key found. Set OPENAI_API_KEY in .env to enable CrewAI."
-        
-        from stock_analysis_crew import create_stock_analysis_crew
-        
-        crew = create_stock_analysis_crew(sym)
-        result = crew.run_analysis()
-        
-        return result, "CrewAI analysis complete!"
-    except Exception as e:
-        return None, f"CrewAI Error: {str(e)}"
+    """Run CrewAI deep analysis - DISABLED due to compatibility issues"""
+    return None, "CrewAI temporarily disabled. Use Quick Analysis."
 
 
 def make_chart(tech, period="1y"):
