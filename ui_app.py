@@ -152,8 +152,13 @@ def get_rec(tech):
 
 
 def run_crewai_analysis(sym):
-    """Run CrewAI deep analysis - DISABLED due to compatibility issues"""
-    return None, "CrewAI temporarily disabled. Use Quick Analysis."
+    """Run CrewAI deep analysis using 5 sequential agents"""
+    try:
+        from crew_agents import run_stock_analysis
+        result = run_stock_analysis(sym)
+        return result, "Analysis complete!"
+    except Exception as e:
+        return None, f"Error: {str(e)}"
 
 
 def make_chart(tech, period="1y"):
@@ -203,18 +208,17 @@ if sym:
     has_api_key = bool(os.getenv("OPENAI_API_KEY"))
     
     if has_api_key:
-        st.markdown('<div class="crew-status ready">🤖 CrewAI: Ready (Deep Analysis Available)</div>', unsafe_allow_html=True)
-        if st.button("🚀 Run Deep CrewAI Analysis"):
-            with st.spinner("Running CrewAI agents..."):
-                crew_result, crew_msg = run_crewai_analysis(sym)
-                if crew_result:
-                    st.success(crew_msg)
-                    st.markdown("### CrewAI Analysis Result:")
-                    st.write(crew_result.get("result", crew_msg))
-                else:
-                    st.warning(crew_msg)
+        with st.expander("🤖 CrewAI Deep Analysis"):
+            if st.button("Run Deep Analysis", key="crew"):
+                with st.spinner("Running CrewAI (5 agents)..."):
+                    res, msg = run_crewai_analysis(sym)
+                    if res:
+                        st.success(msg)
+                        st.text(res.get("result", ""))
+                    else:
+                        st.warning(msg)
     else:
-        st.markdown('<div class="crew-status no-key">🤖 CrewAI: API Key Required - Using Quick Analysis</div>', unsafe_allow_html=True)
+        st.info("💡 Set OPENAI_API_KEY in .env for Deep Analysis")
     
     try:
         info, hist = get_stock(sym)
