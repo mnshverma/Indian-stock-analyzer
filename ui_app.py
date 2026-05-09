@@ -10,10 +10,12 @@ from dotenv import load_dotenv
 
 st.set_page_config(page_title="Manver IQ", page_icon="📈", layout="wide")
 
-col_logo, _ = st.columns([1, 2])
+col_logo, col_title = st.columns([1, 2])
 with col_logo:
     st.image("manver_logo.png", use_container_width=True)
-st.caption("Manver IQ 📈 Smart Stock Analysis | NSE/BSE")
+with col_title:
+    st.markdown("<h1 style='margin-top:20px; color:#1a237e;'>Manver IQ</h1>", unsafe_allow_html=True)
+st.caption("📈 Smart Stock Analysis | NSE/BSE")
 
 st.markdown("""
 <style>
