@@ -36,29 +36,25 @@ st.markdown("""
     * { font-family: Arial, sans-serif; font-size: 11px; }
     .block-container { padding: 0.4rem !important; }
     div[data-testid="stMetric"] { background: white; padding: 0.25rem; border-radius: 3px; }
-    div[data-testid="stMetric"] label { font-size: 9px; color: #666; }
-    div[data-testid="stMetric"] .stMarkdown { font-size: 10px; font-weight: 600; }
-    .search-box input { font-size: 0.8rem; }
-    h1, h2, h3 { font-size: 0.9rem; }
-    p, small { font-size: 10px; }
+    div[data-testid="stMetric"] label { color: #666; }
+    .search-box input { font-size: 11px; }
+    h1 { font-size: 16px; font-weight: bold; color: #1a237e; margin: 0; }
+    p, small { font-size: 11px; }
     .rec { padding: 0.4rem; border-radius: 5px; text-align: center; margin-bottom: 0.4rem; }
     .rec.buy { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; }
     .rec.sell { background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #f44336; }
     .rec.hold { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ffc107; }
-    .rec-val { font-size: 0.9rem; font-weight: 700; }
+    .rec-val { font-size: 14px; font-weight: 700; }
     .rec.buy .rec-val { color: #2e7d32; }
     .rec.sell .rec-val { color: #c62828; }
     .rec.hold .rec-val { color: #f57c00; }
     .news { padding: 0.25rem; border-left: 3px solid #1976d2; background: #f5f5f5; margin-bottom: 0.15rem; }
-    .news-t { font-size: 0.6rem; }
-    .news-s { font-size: 0.5rem; color: #888; }
-    .tag { padding: 0.1rem 0.25rem; border-radius: 8px; font-size: 0.55rem; }
-    .tag.bull { background: #c8e6c9; color: #2e7d32; }
-    .tag.bear { background: #ffcdd2; color: #c62828; }
+    .news-t { font-size: 11px; }
+    .news-s { font-size: 10px; color: #888; }
     .ai-box { background: #e3f2fd; padding: 0.4rem; border-radius: 5px; margin-bottom: 0.4rem; border: 1px solid #1976d2; }
-    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown strong { font-size: 0.85rem; }
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown strong { font-size: 12px; font-weight: bold; }
     .stTabs [data-baseweb="tab-list"] { gap: 0.3rem; }
-    .stTabs [data-baseweb="tab"] { font-size: 0.7rem; padding: 0.2rem 0.5rem; }
+    .stTabs [data-baseweb="tab"] { padding: 0.2rem 0.5rem; }
     div[data-testid="stVerticalBlock"] { gap: 0.3rem; }
     .stMarkdown { margin-bottom: 0.2rem; }
     .stDivider { margin: 0.3rem 0; }
