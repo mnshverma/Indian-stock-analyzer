@@ -12,21 +12,73 @@ st.set_page_config(page_title="Manver IQ", page_icon="🧠", layout="wide")
 
 st.markdown("""
 <style>
-    * { font-family: Arial, sans-serif; }
-    .block-container { padding: 1rem !important; }
+    /* Responsive Design */
+    * { font-family: Arial, sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+    .block-container { padding: 0.5rem !important; max-width: 100% !important; }
     
-    .header { background: linear-gradient(135deg, #1a237e, #3949ab); padding: 1rem; border-radius: 8px; color: white; margin-bottom: 0.75rem; text-align: center; }
-    .header h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
-    .header p { font-size: 0.85rem; opacity: 0.9; margin: 0.25rem 0 0 0; }
-    .search { padding: 0.75rem; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); margin-bottom: 0.75rem; }
+    .header { background: linear-gradient(135deg, #1a237e, #3949ab); padding: 0.75rem; border-radius: 8px; color: white; margin-bottom: 0.5rem; text-align: center; }
+    .header h1 { font-size: 1.3rem; font-weight: 700; margin: 0; }
+    .header p { font-size: 0.75rem; opacity: 0.9; margin: 0.2rem 0 0 0; }
     
-    .metrics { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; flex-wrap: wrap; justify-content: center; }
-    .m { flex: 1; min-width: 100px; background: white; padding: 0.6rem 0.5rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
-    .m-label { font-size: 0.6rem; color: #666; text-transform: uppercase; }
-    .m-val { font-size: 0.95rem; font-weight: 700; color: #1a237e; }
-    .m-delta { font-size: 0.7rem; }
+    /* Input Search */
+    div[data-testid="stTextInput"] { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+    div[data-testid="stTextInput"] input { font-size: 1rem; padding: 0.6rem 1rem; border-radius: 25px; width: 100%; max-width: 350px; border: 2px solid #ddd; }
+    div[data-testid="stTextInput"] input:focus { outline: none; border-color: #1a237e; }
+    
+    /* Metrics Grid - Responsive */
+    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 0.4rem; margin-bottom: 0.5rem; }
+    .m { background: white; padding: 0.5rem 0.3rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .m-label { font-size: 0.5rem; color: #666; text-transform: uppercase; }
+    .m-val { font-size: 0.8rem; font-weight: 700; color: #1a237e; word-break: break-word; }
+    .m-delta { font-size: 0.6rem; }
     .m-delta.pos { color: #2e7d32; }
     .m-delta.neg { color: #c62828; }
+    
+    /* Recommendation Box */
+    .rec { padding: 0.75rem; border-radius: 8px; text-align: center; margin-bottom: 0.5rem; }
+    .rec.buy { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; }
+    .rec.sell { background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #f44336; }
+    .rec.hold { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ffc107; }
+    .rec-lbl { font-size: 0.6rem; color: #666; }
+    .rec-val { font-size: 1.5rem; font-weight: 800; }
+    .rec.buy .rec-val { color: #2e7d32; }
+    .rec.sell .rec-val { color: #c62828; }
+    .rec.hold .rec-val { color: #f57c00; }
+    .rec-tags { display: flex; justify-content: center; gap: 0.75rem; font-size: 0.7rem; margin-top: 0.4rem; flex-wrap: wrap; }
+    
+    /* Tabs */
+    .tabs { margin-bottom: 0.5rem; }
+    .stTabs [data-baseweb="tab-list"] { gap: 0.2rem; background: #f5f5f5; padding: 0.2rem; border-radius: 5px; overflow-x: auto; }
+    .stTabs [data-baseweb="tab"] { padding: 0.3rem 0.6rem; border-radius: 4px 4px 0 0; font-size: 0.75rem; }
+    .stTabs [aria-selected="true"] { background: white; }
+    
+    /* Columns */
+    .cols { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .col { flex: 1; min-width: 140px; }
+    
+    /* News */
+    .news { padding: 0.4rem; border-left: 3px solid #1976d2; background: #f5f5f5; margin-bottom: 0.3rem; border-radius: 0 4px 4px 0; }
+    .news-t { font-size: 0.7rem; font-weight: 500; word-wrap: break-word; }
+    .news-s { font-size: 0.6rem; color: #888; }
+    
+    /* Tags */
+    .tag { display: inline-block; padding: 0.2rem 0.4rem; border-radius: 12px; font-size: 0.65rem; font-weight: 600; margin: 0.1rem; }
+    .tag.bull { background: #c8e6c9; color: #2e7d32; }
+    .tag.bear { background: #ffcdd2; color: #c62828; }
+    .tag.neut { background: #fff9c4; color: #f57f17; }
+    
+    .ai-box { background: linear-gradient(135deg, #e8f5e9, #e3f2fd); padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem; border: 1px solid #4caf50; }
+    .ai-box h3 { font-size: 0.8rem; color: #1565c0; margin: 0 0 0.4rem 0; }
+    .ai-box p { font-size: 0.7rem; color: #333; white-space: pre-wrap; max-height: 150px; overflow-y: auto; }
+    
+    /* Mobile */
+    @media (max-width: 480px) {
+        .header h1 { font-size: 1.1rem; }
+        .metrics { grid-template-columns: repeat(3, 1fr); }
+        .rec-val { font-size: 1.2rem; }
+    }
+</style>
+""", unsafe_allow_html=True)
     
     .rec { padding: 0.85rem; border-radius: 8px; text-align: center; margin-bottom: 0.75rem; }
     .rec.buy { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; }
@@ -211,8 +263,22 @@ def fmt(v):
 st.markdown('<div style="max-width:1200px;margin:0 auto;">', unsafe_allow_html=True)
 
 st.markdown('<div class="header"><h1>🧠 Manver IQ</h1><p>Smart Stock Analysis | NSE/BSE</p></div>', unsafe_allow_html=True)
+sym = st.text_input("🔍 Search", placeholder="RELIANCE, TCS, HDFCBANK...", key="s")
 
-st.markdown('<div class="search"><span style="font-size:1.2rem;">🔍 </span>' + st.text_input("Stock Symbol", placeholder="RELIANCE, TCS, HDFCBANK...", key="s") + '</div>', unsafe_allow_html=True)
+st.markdown("""
+<style>
+    div[data-testid="stTextInput"] input {
+        font-size: 1rem;
+        padding: 0.5rem;
+        border-radius: 6px;
+    }
+    div[data-testid="stTextInput"] {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+""", unsafe_allow_html=True)
+sym = st.text_input("", placeholder="Search stock (e.g. RELIANCE, TCS...)", key="s", label_visibility="collapsed")
 
 if sym:
     # Auto-run AI if API key exists (behind the scenes)
