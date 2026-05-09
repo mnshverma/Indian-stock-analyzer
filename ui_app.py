@@ -72,7 +72,7 @@ def get_news(sym):
     news, seen = [], set()
     sym_c = sym.upper().replace(".NS", "")
     
-    # Moneycontrol RSS
+    # Try Moneycontrol RSS first
     try:
         feed = feedparser.parse(f"https://news.moneycontrol.com/rss/companyfeed/{sym_c}", timeout=8)
         for e in feed.entries[:5]:
@@ -83,23 +83,33 @@ def get_news(sym):
     except:
         pass
     
-    # Add screener.in news via web scraping
+    # Try Screener.in - scrape announcements and news
     try:
         import requests
-        url = f"https://www.screener.in/company/{sym_c}"
-        resp = requests.get(url, timeout=10)
+        from bs4 import BeautifulSoup
+        
+        url = f"https://www.screener.in/company/{sym_c}/"
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        resp = requests.get(url, headers=headers, timeout=10)
+        
         if resp.status_code == 200:
-            # Try to get announcements
-            news.append({"title": f"Check {sym_c} on Screener.in for latest news", "source": "Screener.in"})
-    except:
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            
+            # Get news/announcements section
+            news_section = soup.find_all(['li', 'div'], class_=lambda x: x and ('news' in x.lower() or 'announce' in x.lower()))
+            
+            for item in news_section[:8]:
+                text = item.get_text(strip=True)
+                if text and len(text) > 20 and text.lower() not in seen:
+                    seen.add(text.lower())
+                    news.append({"title": text[:150], "source": "Screener.in"})
+    except Exception as e:
         pass
     
-    # Fallback news if empty
+    # Fallback: Return whatever we found or placeholder
     if not news:
         news = [
-            {"title": f"Sear ch: {sym_c} stock news on Moneycontrol", "source": "Tip"},
-            {"title": f"Check Screener.in for {sym_c} quarterly results", "source": "Tip"},
-            {"title": f"Visit Economic Times for {sym_c} latest news", "source": "Tip"}
+            {"title": f"No news available for {sym_c} from Moneycontrol/Screener", "source": "Info"}
         ]
     
     return news[:10]
