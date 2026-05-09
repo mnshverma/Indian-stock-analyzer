@@ -274,58 +274,85 @@ if sym and submitted:
             with t2:
                 per = st.select_slider("", ["1m", "3m", "6m", "1y", "2y"], label_visibility="collapsed")
                 st.plotly_chart(make_chart(tech, per), use_container_width=True)
-            with t2:
+                
                 rsi = tech["rsi"]
                 rt = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
                 mt = "bull" if tech["macd"] > tech["macd_s"] else "bear"
                 
-                st.markdown("**📊 Indicators**")
+                st.markdown("**📊 RSI (Relative Strength Index)**")
                 c_ind1, c_ind2 = st.columns(2)
                 with c_ind1:
-                    st.markdown("RSI (0-100): <small>below 30=oversold, above 70=overbought</small>", unsafe_allow_html=True)
-                    st.metric("RSI", f"{rsi:.0f}")
+                    st.markdown("RSI (0-100): <small>below 30=Oversold (buy), above 70=Overbought (sell)</small>", unsafe_allow_html=True)
+                    st.metric("RSI Value", f"{rsi:.0f}")
                 with c_ind2:
-                    st.markdown("MACD: <small>above Signal=bullish cross</small>", unsafe_allow_html=True)
-                    st.metric("MACD vs Signal", f"{tech['macd']:.2f} vs {tech['macd_s']:.2f}")
+                    st.markdown("RSI Signal: <small>Below 30=Bullish, Above 70=Bearish</small>", unsafe_allow_html=True)
+                    st.metric("Signal", f"{'Oversold 🚀' if rsi < 30 else ('Overbought ⚠️' if rsi > 70 else 'Neutral')}")
                 
-                st.markdown("**📈 Moving Averages**")
+                st.markdown("**📈 Moving Averages (MA)**")
                 c_ma1, c_ma2, c_ma3 = st.columns(3)
                 with c_ma1:
+                    st.markdown("MA20: <small>20-day moving avg (short-term trend)</small>", unsafe_allow_html=True)
                     st.metric("MA20", f"₹{tech['m20']:.0f}")
                 with c_ma2:
+                    st.markdown("MA50: <small>50-day moving avg (mid-term trend)</small>", unsafe_allow_html=True)
                     st.metric("MA50", f"₹{tech['m50']:.0f}")
                 with c_ma3:
+                    st.markdown("MA200: <small>200-day moving avg (long-term trend)</small>", unsafe_allow_html=True)
                     st.metric("MA200", f"₹{tech['m200']:.0f}" if tech["m200"] else "N/A")
                 
-                st.markdown("**💰 Price Basis**")
+                st.markdown("**📊 MACD (Moving Average Convergence Divergence)**")
+                c_macd1, c_macd2 = st.columns(2)
+                with c_macd1:
+                    st.markdown("MACD: <small>Diff between 12-day & 26-day EMA</small>", unsafe_allow_html=True)
+                    st.metric("MACD", f"{tech['macd']:.2f}")
+                with c_macd2:
+                    st.markdown("Signal: <small>9-day EMA of MACD (buy/sell signal)</small>", unsafe_allow_html=True)
+                    st.metric("Signal", f"{tech['macd_s']:.2f}")
+                
+                st.markdown("**💰 P/E (Price to Earnings) Ratio**")
                 pe = info.get("trailingPE")
+                st.markdown("P/E: <small>Price ÷ EPS. Lower=cheaper (15-25 avg for banking). High=expensive</small>", unsafe_allow_html=True)
+                st.metric("P/E Ratio", f"{pe:.1f}" if pe else "N/A")
+                
+                st.markdown("**📊 P/B (Price to Book) Ratio**")
                 pb = info.get("priceToBook")
-                c_f1, c_f2, c_f3 = st.columns(3)
-                with c_f1:
-                    st.markdown("P/E: <small>lower=cheap (15-25 avg)</small>", unsafe_allow_html=True)
-                    st.metric("P/E", f"{pe:.1f}" if pe else "N/A")
-                with c_f2:
-                    st.markdown("P/B: <small>lower=undervalued (<3 good)</small>", unsafe_allow_html=True)
-                    st.metric("P/B", f"{pb:.1f}" if pb else "N/A")
-                with c_f3:
-                    ps = info.get("priceToSalesTrailing12Months")
-                    st.markdown("P/S: <small>lower=better (<2 ideal)</small>", unsafe_allow_html=True)
-                    st.metric("P/S", f"{ps:.1f}" if ps else "N/A")
+                st.markdown("P/B: <small>Price ÷ Book Value. Below 1=undervalued. Below 3=better</small>", unsafe_allow_html=True)
+                st.metric("P/B Ratio", f"{pb:.1f}" if pb else "N/A")
                 
-                st.markdown("**⚡ Efficiency**")
+                st.markdown("**📊 P/S (Price to Sales) Ratio**")
+                ps = info.get("priceToSalesTrailing12Months")
+                st.markdown("P/S: <small>Market Cap ÷ Revenue. Below 2=ideal, lower=better value</small>", unsafe_allow_html=True)
+                st.metric("P/S Ratio", f"{ps:.1f}" if ps else "N/A")
+                
+                st.markdown("**⚡ ROE (Return on Equity)**")
                 roe = info.get("returnOnEquity")
-                roa = info.get("returnOnAssets")
-                c_o1, c_o2 = st.columns(2)
-                with c_o1:
-                    st.markdown("ROE: <small>higher=better (>15% good)</small>", unsafe_allow_html=True)
-                    st.metric("ROE", f"{(roe or 0)*100:.1f}%" if roe else "N/A")
-                with c_o2:
-                    st.markdown("ROA: <small>higher=efficient (>5% good)</small>", unsafe_allow_html=True)
-                    st.metric("ROA", f"{(roa or 0)*100:.1f}%" if roa else "N/A")
+                st.markdown("ROE: <small>Net Income ÷ Shareholders Equity. Higher=better (>15% good)</small>", unsafe_allow_html=True)
+                st.metric("ROE", f"{(roe or 0)*100:.1f}%" if roe else "N/A")
                 
+                st.markdown("**⚡ ROA (Return on Assets)**")
+                roa = info.get("returnOnAssets")
+                st.markdown("ROA: <small>Net Income ÷ Total Assets. Higher=more efficient (>5% good)</small>", unsafe_allow_html=True)
+                st.metric("ROA", f"{(roa or 0)*100:.1f}%" if roa else "N/A")
+                
+                st.markdown("**⚖️ D/E (Debt to Equity) Ratio**")
                 de = info.get("debtToEquity")
-                st.markdown("D/E: <small>lower=less debt (<50 safe)</small>", unsafe_allow_html=True)
+                st.markdown("D/E: <small>Total Debt ÷ Equity. Lower=less risky (<50 safe)</small>", unsafe_allow_html=True)
                 st.metric("Debt/Equity", f"{de:.1f}" if de else "N/A")
+                
+                st.markdown("**💵 EPS (Earnings Per Share)**")
+                eps = info.get("trailingEps")
+                st.markdown("EPS: <small>Net Income ÷ Outstanding Shares. Higher=better earnings</small>", unsafe_allow_html=True)
+                st.metric("EPS (TTM)", f"₹{eps:.2f}" if eps else "N/A")
+                
+                st.markdown("**📊 Book Value per Share**")
+                bv = info.get("bookValue")
+                st.markdown("Book Value: <small>Total Equity ÷ Shares. What shareholders get if liquidated</small>", unsafe_allow_html=True)
+                st.metric("Book Value", f"₹{bv:.2f}" if bv else "N/A")
+                
+                st.markdown("**💵 Dividend Yield**")
+                dy = info.get("dividendYield")
+                st.markdown("Div Yield: <small>Annual Dividend ÷ Price. Higher=more returns (>2% good)</small>", unsafe_allow_html=True)
+                st.metric("Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
                 
                 st.markdown("**🎯 Valuation**")
                 eps = info.get("trailingEps")
