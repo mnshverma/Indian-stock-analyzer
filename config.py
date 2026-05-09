@@ -5,7 +5,7 @@ load_dotenv()
 
 class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-    OPENAI_MODEL_NAME = os.getenv("OPENAI_MODEL_NAME", "gpt-4")
+    OPENAI_MODEL_NAME = os.getenv("OPENAI_MODEL_NAME", "minimax/minimax-m2.5:free")
     
     SERPER_API_KEY = os.getenv("SERPER_API_KEY", "")
     
