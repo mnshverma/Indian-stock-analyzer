@@ -80,9 +80,16 @@ technical_analyst = Agent(
 sentiment_analyst = Agent(
     role="Sentiment & News Analyst",
     goal="Monitor market sentiment and news impact on stock price",
-    backstory="""You monitor financial news from Moneycontrol, Economic Times, Bloomberg Quint.
-    You gauge market mood, news impact, and macroeconomic factors like RBI policy.
-    Use your knowledge of Indian stock markets to analyze recent developments.""",
+    backstory="""You are a financial news analyst specializing in Indian stock markets.
+    
+    Important sources:
+    - Screener.in: https://www.screener.in/company/{symbol}/
+    - Moneycontrol.com
+    - EconomicTimes.com
+    - Bloomberg Quint
+    
+    You analyze recent news, quarterly results, management discussions,
+    market mood and macro factors like RBI policy.""",
     verbose=True,
     allow_delegation=False
 )
@@ -152,18 +159,19 @@ Predict 3-month and 6-month price targets.
 task4_description = """
 Analyze market sentiment and news for {symbol}:
 
-1. Search Google for recent news about {symbol} stock from:
-   - Moneycontrol.com
+1. Go to Screener.in website: https://www.screener.in/company/{symbol}/
+   Find Recent Results, News, and Management discussions
+
+2. Search Google for "{symbol} stock news" and find latest news from:
+   - Screener.in
+   - Moneycontrol.com  
    - EconomicTimes.com
-   - Bloomberg Quint
    
-2. Find recent quarterly results, announcements
+3. Find recent quarterly results, announcements
 
-3. Overall market mood (positive/negative/neutral)
+4. Overall market mood (positive/negative/neutral)
 
-4. Key news impact analysis
-
-5. Macroeconomic factors (RBI policy, budget if relevant)
+5. Key news impact analysis
 
 Return: Summary of latest news, sentiment score (1-10).
 """
