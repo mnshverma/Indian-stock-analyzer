@@ -58,8 +58,11 @@ st.markdown("""
     .tag.bear { background: #ffcdd2; color: #c62828; }
     .ai-box { background: #e3f2fd; padding: 0.4rem; border-radius: 5px; margin-bottom: 0.4rem; border: 1px solid #1976d2; }
     .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown strong { font-size: 0.85rem; }
-    .stTabs [data-baseweb="tab-list"] { gap: 0.5rem; }
-    .stTabs [data-baseweb="tab"] { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+    .stTabs [data-baseweb="tab-list"] { gap: 0.3rem; }
+    .stTabs [data-baseweb="tab"] { font-size: 0.7rem; padding: 0.2rem 0.5rem; }
+    div[data-testid="stVerticalBlock"] { gap: 0.3rem; }
+    .stMarkdown { margin-bottom: 0.2rem; }
+    .stDivider { margin: 0.3rem 0; }
     @media (max-width: 600px) {
         * { font-size: 10px; }
     }
@@ -218,15 +221,16 @@ if sym and submitted:
                 rt = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
                 mt = "bull" if tech["macd"] > tech["macd_s"] else "bear"
                 
-                st.markdown("**Indicators & Moving Averages**")
-                c_ind1, c_ind2, c_ind3 = st.columns(3)
+                st.markdown("**📊 Indicators**")
+                c_ind1, c_ind2 = st.columns(2)
                 with c_ind1:
-                    st.metric("RSI", f"{rsi:.0f}", delta_color="normal")
+                    st.markdown("RSI (0-100): <small>below 30=oversold, above 70=overbought</small>", unsafe_allow_html=True)
+                    st.metric("RSI", f"{rsi:.0f}")
                 with c_ind2:
-                    st.metric("MACD", f"{tech['macd']:.2f}", delta="Bull" if tech['macd'] > tech['macd_s'] else "Bear")
-                with c_ind3:
-                    st.metric("Signal", f"{tech['macd_s']:.2f}")
+                    st.markdown("MACD: <small>above Signal=bullish cross</small>", unsafe_allow_html=True)
+                    st.metric("MACD vs Signal", f"{tech['macd']:.2f} vs {tech['macd_s']:.2f}")
                 
+                st.markdown("**📈 Moving Averages**")
                 c_ma1, c_ma2, c_ma3 = st.columns(3)
                 with c_ma1:
                     st.metric("MA20", f"₹{tech['m20']:.0f}")
@@ -235,46 +239,50 @@ if sym and submitted:
                 with c_ma3:
                     st.metric("MA200", f"₹{tech['m200']:.0f}" if tech["m200"] else "N/A")
                 
-                st.markdown("---")
-                st.markdown("**Fundamentals**")
-                mc = info.get("marketCap", 0)
+                st.markdown("**💰 Price Basis**")
                 pe = info.get("trailingPE")
                 pb = info.get("priceToBook")
-                ps = info.get("priceToSalesTrailing12Months")
-                c_f1, c_f2, c_f3, c_f4 = st.columns(4)
+                c_f1, c_f2, c_f3 = st.columns(3)
                 with c_f1:
-                    st.metric("Mkt Cap", fmt(mc))
-                with c_f2:
+                    st.markdown("P/E: <small>lower=cheap (15-25 avg)</small>", unsafe_allow_html=True)
                     st.metric("P/E", f"{pe:.1f}" if pe else "N/A")
-                with c_f3:
+                with c_f2:
+                    st.markdown("P/B: <small>lower=undervalued (<3 good)</small>", unsafe_allow_html=True)
                     st.metric("P/B", f"{pb:.1f}" if pb else "N/A")
-                with c_f4:
+                with c_f3:
+                    ps = info.get("priceToSalesTrailing12Months")
+                    st.markdown("P/S: <small>lower=better (<2 ideal)</small>", unsafe_allow_html=True)
                     st.metric("P/S", f"{ps:.1f}" if ps else "N/A")
                 
-                st.markdown("---")
-                st.markdown("**Ownership & Efficiency**")
+                st.markdown("**⚡ Efficiency**")
                 roe = info.get("returnOnEquity")
                 roa = info.get("returnOnAssets")
-                de = info.get("debtToEquity")
-                c_o1, c_o2, c_o3 = st.columns(3)
+                c_o1, c_o2 = st.columns(2)
                 with c_o1:
+                    st.markdown("ROE: <small>higher=better (>15% good)</small>", unsafe_allow_html=True)
                     st.metric("ROE", f"{(roe or 0)*100:.1f}%" if roe else "N/A")
                 with c_o2:
+                    st.markdown("ROA: <small>higher=efficient (>5% good)</small>", unsafe_allow_html=True)
                     st.metric("ROA", f"{(roa or 0)*100:.1f}%" if roa else "N/A")
-                with c_o3:
-                    st.metric("D/E", f"{de:.1f}" if de else "N/A")
                 
-                st.markdown("---")
-                st.markdown("**Valuation**")
+                de = info.get("debtToEquity")
+                st.markdown("D/E: <small>lower=less debt (<50 safe)</small>", unsafe_allow_html=True)
+                st.metric("Debt/Equity", f"{de:.1f}" if de else "N/A")
+                
+                st.markdown("**🎯 Valuation**")
                 eps = info.get("trailingEps")
                 bv = info.get("bookValue")
                 dy = info.get("dividendYield")
                 c_v1, c_v2, c_v3 = st.columns(3)
                 with c_v1:
+                    st.markdown("EPS: <small>earnings/share (higher=better)</small>", unsafe_allow_html=True)
                     st.metric("EPS", f"₹{eps:.2f}" if eps else "N/A")
                 with c_v2:
-                    st.metric("Book Value", f"₹{bv:.2f}" if bv else "N/A")
+                    st.markdown("Book Value: <small>assets per share</small>", unsafe_allow_html=True)
+                    st.metric("Book", f"₹{bv:.2f}" if bv else "N/A")
                 with c_v3:
+                    st.markdown("Div Yield: <small>annual dividend %</small>", unsafe_allow_html=True)
+                    st.metric("Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
                     st.metric("Div Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
             with t3:
                 st.markdown(f"**{info.get('longName', sym.upper())}**")
