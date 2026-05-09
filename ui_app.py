@@ -214,38 +214,65 @@ if sym and submitted:
                 rsi = tech["rsi"]
                 rt = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
                 mt = "bull" if tech["macd"] > tech["macd_s"] else "bear"
-                st.markdown(f"**Indicators**")
-                st.markdown(f"RSI: <span class='tag {rt}'>{rsi:.0f}</span> MACD: <span class='tag {mt}'>{'Bull' if tech['macd'] > tech['macd_s'] else 'Bear'}</span>", unsafe_allow_html=True)
-                st.markdown(f"MA20: ₹{tech['m20']:.0f} | MA50: ₹{tech['m50']:.0f}" + (f" | MA200: ₹{tech['m200']:.0f}" if tech["m200"] else ""))
+                
+                st.markdown("**Indicators & Moving Averages**")
+                c_ind1, c_ind2, c_ind3 = st.columns(3)
+                with c_ind1:
+                    st.metric("RSI", f"{rsi:.0f}", delta_color="normal")
+                with c_ind2:
+                    st.metric("MACD", f"{tech['macd']:.2f}", delta="Bull" if tech['macd'] > tech['macd_s'] else "Bear")
+                with c_ind3:
+                    st.metric("Signal", f"{tech['macd_s']:.2f}")
+                
+                c_ma1, c_ma2, c_ma3 = st.columns(3)
+                with c_ma1:
+                    st.metric("MA20", f"₹{tech['m20']:.0f}")
+                with c_ma2:
+                    st.metric("MA50", f"₹{tech['m50']:.0f}")
+                with c_ma3:
+                    st.metric("MA200", f"₹{tech['m200']:.0f}" if tech["m200"] else "N/A")
                 
                 st.markdown("---")
                 st.markdown("**Fundamentals**")
                 mc = info.get("marketCap", 0)
-                st.metric("Mkt Cap", fmt(mc))
                 pe = info.get("trailingPE")
                 pb = info.get("priceToBook")
                 ps = info.get("priceToSalesTrailing12Months")
-                st.metric("P/E", f"{pe:.1f}" if pe else "N/A")
-                st.metric("P/B", f"{pb:.1f}" if pb else "N/A")
-                st.metric("P/S", f"{ps:.1f}" if ps else "N/A")
+                c_f1, c_f2, c_f3, c_f4 = st.columns(4)
+                with c_f1:
+                    st.metric("Mkt Cap", fmt(mc))
+                with c_f2:
+                    st.metric("P/E", f"{pe:.1f}" if pe else "N/A")
+                with c_f3:
+                    st.metric("P/B", f"{pb:.1f}" if pb else "N/A")
+                with c_f4:
+                    st.metric("P/S", f"{ps:.1f}" if ps else "N/A")
                 
                 st.markdown("---")
-                st.markdown("**Ownership**")
+                st.markdown("**Ownership & Efficiency**")
                 roe = info.get("returnOnEquity")
                 roa = info.get("returnOnAssets")
                 de = info.get("debtToEquity")
-                st.metric("ROE", f"{(roe or 0)*100:.1f}%" if roe else "N/A")
-                st.metric("ROA", f"{(roa or 0)*100:.1f}%" if roa else "N/A")
-                st.metric("D/E", f"{de:.1f}" if de else "N/A")
+                c_o1, c_o2, c_o3 = st.columns(3)
+                with c_o1:
+                    st.metric("ROE", f"{(roe or 0)*100:.1f}%" if roe else "N/A")
+                with c_o2:
+                    st.metric("ROA", f"{(roa or 0)*100:.1f}%" if roa else "N/A")
+                with c_o3:
+                    st.metric("D/E", f"{de:.1f}" if de else "N/A")
                 
                 st.markdown("---")
                 st.markdown("**Valuation**")
                 eps = info.get("trailingEps")
                 bv = info.get("bookValue")
                 dy = info.get("dividendYield")
-                st.metric("EPS", f"₹{eps:.2f}" if eps else "N/A")
-                st.metric("Book Value", f"₹{bv:.2f}" if bv else "N/A")
-                st.metric("Div Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
+                c_v1, c_v2, c_v3 = st.columns(3)
+                with c_v1:
+                    st.metric("EPS", f"₹{eps:.2f}" if eps else "N/A")
+                with c_v2:
+                    st.metric("Book Value", f"₹{bv:.2f}" if bv else "N/A")
+                with c_v3:
+                    st.metric("Div Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
             with t3:
                 st.markdown(f"**{info.get('longName', sym.upper())}**")
                 st.markdown(f"Sector: {info.get('sector', 'N/A')}")
