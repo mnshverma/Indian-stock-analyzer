@@ -14,44 +14,48 @@ st.markdown("""
 <style>
     * { font-family: Arial, sans-serif; }
     .block-container { padding: 1rem !important; }
+    
     .header { background: linear-gradient(135deg, #1a237e, #3949ab); padding: 1rem; border-radius: 8px; color: white; margin-bottom: 0.75rem; text-align: center; }
     .header h1 { font-size: 1.5rem; font-weight: 700; margin: 0; }
     .header p { font-size: 0.85rem; opacity: 0.9; margin: 0.25rem 0 0 0; }
     .search { padding: 0.75rem; background: white; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); margin-bottom: 0.75rem; }
-    .metrics { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
-    .m { flex: 1; min-width: 90px; background: white; padding: 0.5rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    
+    .metrics { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .m { flex: 1; min-width: 100px; background: white; padding: 0.6rem 0.5rem; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
     .m-label { font-size: 0.6rem; color: #666; text-transform: uppercase; }
-    .m-val { font-size: 0.9rem; font-weight: 700; color: #1a237e; }
+    .m-val { font-size: 0.95rem; font-weight: 700; color: #1a237e; }
     .m-delta { font-size: 0.7rem; }
     .m-delta.pos { color: #2e7d32; }
     .m-delta.neg { color: #c62828; }
-    .rec { padding: 0.75rem; border-radius: 8px; text-align: center; margin-bottom: 0.75rem; }
-    .rec.buy { background: #e8f5e9; border: 2px solid #4caf50; }
-    .rec.sell { background: #ffebee; border: 2px solid #f44336; }
-    .rec.hold { background: #fff8e1; border: 2px solid #ffc107; }
+    
+    .rec { padding: 0.85rem; border-radius: 8px; text-align: center; margin-bottom: 0.75rem; }
+    .rec.buy { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; }
+    .rec.sell { background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #f44336; }
+    .rec.hold { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ffc107; }
     .rec-lbl { font-size: 0.7rem; color: #666; }
-    .rec-val { font-size: 1.8rem; font-weight: 800; }
+    .rec-val { font-size: 2rem; font-weight: 800; }
     .rec.buy .rec-val { color: #2e7d32; }
     .rec.sell .rec-val { color: #c62828; }
     .rec.hold .rec-val { color: #f57c00; }
-    .rec-tags { display: flex; justify-content: center; gap: 0.75rem; font-size: 0.75rem; margin-top: 0.4rem; flex-wrap: wrap; }
+    .rec-tags { display: flex; justify-content: center; gap: 1rem; font-size: 0.8rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    
     .tabs { margin-bottom: 0.5rem; }
     .stTabs [data-baseweb="tab-list"] { gap: 0.25rem; background: #f5f5f5; padding: 0.2rem; border-radius: 5px; }
     .stTabs [data-baseweb="tab"] { padding: 0.35rem 0.7rem; border-radius: 4px 4px 0 0; font-size: 0.8rem; }
     .stTabs [aria-selected="true"] { background: white; }
+    
     .tag { display: inline-block; padding: 0.2rem 0.5rem; border-radius: 12px; font-size: 0.7rem; font-weight: 600; margin: 0.15rem; }
     .tag.bull { background: #c8e6c9; color: #2e7d32; }
     .tag.bear { background: #ffcdd2; color: #c62828; }
     .tag.neut { background: #fff9c4; color: #f57f17; }
+    
     .news { padding: 0.5rem; border-left: 3px solid #1976d2; background: #f5f5f5; margin-bottom: 0.35rem; border-radius: 0 4px 4px 0; }
     .news-t { font-size: 0.75rem; font-weight: 500; }
     .news-s { font-size: 0.65rem; color: #888; }
-    .cols { display: flex; gap: 0.5rem; }
-    .col { flex: 1; }
-    .col h4 { font-size: 0.8rem; font-weight: 600; color: #333; margin: 0 0 0.4rem 0; }
-    .crew-result { background: #e3f2fd; padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; border: 1px solid #1976d2; }
-    .crew-result h3 { font-size: 0.9rem; color: #1565c0; margin: 0 0 0.5rem 0; }
-    .crew-result pre { font-size: 0.75rem; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+    
+    .ai-box { background: linear-gradient(135deg, #e8f5e9, #e3f2fd); padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; border: 1px solid #4caf50; }
+    .ai-box h3 { font-size: 0.9rem; color: #1565c0; margin: 0 0 0.5rem 0; }
+    .ai-box p { font-size: 0.8rem; color: #333; white-space: pre-wrap; max-height: 200px; overflow-y: auto; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -121,12 +125,24 @@ def get_rec(tech):
     return {"rec": rec, "sigs": sigs, "tgt": tgt, "stop": stop, "up": ((tgt-tech["price"])/tech["price"])*100, "dn": ((tech["price"]-stop)/tech["price"])*100}
 
 
-def run_deep_analysis(sym):
+def get_api_key():
+    """Get API key from Streamlit secrets or .env"""
+    try:
+        import streamlit as st
+        api_key = st.secrets.get("OPENAI_API_KEY") if hasattr(st, 'secrets') else None
+        if api_key:
+            return api_key
+    except:
+        pass
     load_dotenv()
-    api_key = os.getenv("OPENAI_API_KEY")
+    return os.getenv("OPENAI_API_KEY")
+
+
+def run_ai_analysis(sym):
+    """Run CrewAI with OpenRouter"""
+    api_key = get_api_key()
     if not api_key:
         return None
-    
     try:
         from crew_agents import run_stock_analysis
         result = run_stock_analysis(sym)
@@ -160,7 +176,7 @@ def fmt(v):
     return f"₹{v:,.0f}"
 
 
-st.markdown('<div style="max-width:1100px;margin:0 auto;">', unsafe_allow_html=True)
+st.markdown('<div style="max-width:1200px;margin:0 auto;">', unsafe_allow_html=True)
 
 st.markdown('<div class="header"><h1>🧠 Manver IQ</h1><p>Smart Stock Analysis | NSE/BSE</p></div>', unsafe_allow_html=True)
 
@@ -169,15 +185,15 @@ sym = st.text_input("Stock Symbol", placeholder="RELIANCE, TCS, HDFCBANK...", ke
 st.markdown('</div>', unsafe_allow_html=True)
 
 if sym:
-    with st.spinner("Analyzing " + sym.upper() + "..."):
-        # Try CrewAI first if API key exists
-        load_dotenv()
-        api_key = os.getenv("OPENAI_API_KEY")
-        crew_result = None
-        if api_key:
-            with st.spinner("Running AI Agents..."):
-                crew_result = run_deep_analysis(sym)
-        
+    # Auto-run AI if API key exists (behind the scenes)
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+    ai_result = None
+    if api_key:
+        with st.spinner("Running AI Analysis..."):
+            ai_result = run_ai_analysis(sym)
+    
+    with st.spinner("Fetching Data..."):
         try:
             info, hist = get_stock(sym)
             tech = get_tech(hist)
@@ -192,22 +208,27 @@ if sym:
                 pc = info.get("previousClose", p)
                 chg = ((p-pc)/pc*100) if pc else 0
                 
-                # Show CrewAI result if available
-                if crew_result and crew_result.get("status") == "success":
-                    st.markdown('<div class="crew-result"><h3>🤖 AI Analysis</h3><pre>' + crew_result.get("result", "")[:2000] + '</pre></div>', unsafe_allow_html=True)
+                # Show AI result at top
+                if ai_result and ai_result.get("status") == "success":
+                    st.markdown('<div class="ai-box"><h3>🤖 AI Analysis</h3><p>' + ai_result.get("result", "")[:3000] + '</p></div>', unsafe_allow_html=True)
                 
-                # Metrics
+                # Metrics - Horizontal
                 st.markdown('<div class="metrics">', unsafe_allow_html=True)
-                st.markdown(f'<div class="m"><div class="m-label">Price</div><div class="m-val">₹{p:.1f}</div><div class="m-delta {"pos" if chg>=0 else "neg"}">{chg:+.1f}%</div></div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="m"><div class="m-label">MktCap</div><div class="m-val">{fmt(info.get("marketCap"))}</div></div>', unsafe_allow_html=True)
-                pe = info.get("trailingPE")
-                pe_val = f"{pe:.1f}" if pe else "N/A"
-                st.markdown(f'<div class="m"><div class="m-label">P/E</div><div class="m-val">{pe_val}</div></div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="m"><div class="m-label">52W High</div><div class="m-val">₹{info.get("fiftyTwoWeekHigh",0):.0f}</div></div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="m"><div class="m-label">52W Low</div><div class="m-val">₹{info.get("fiftyTwoWeekLow",0):.0f}</div></div>', unsafe_allow_html=True)
+                col1, col2, col3, col4, col5 = st.columns(5)
+                with col1:
+                    st.metric("Price", f"₹{p:.1f}", f"{chg:+.1f}%")
+                with col2:
+                    st.metric("Mkt Cap", fmt(info.get("marketCap", 0)))
+                with col3:
+                    pe = info.get("trailingPE")
+                    st.metric("P/E", f"{pe:.1f}" if pe else "N/A")
+                with col4:
+                    st.metric("52W High", f"₹{info.get('fiftyTwoWeekHigh', 0):.0f}")
+                with col5:
+                    st.metric("52W Low", f"₹{info.get('fiftyTwoWeekLow', 0):.0f}")
                 st.markdown('</div>', unsafe_allow_html=True)
                 
-                # Rec
+                # Recommendation
                 rc = "buy" if rec["rec"] in ["STRONG BUY","BUY"] else ("sell" if rec["rec"]=="SELL" else "hold")
                 st.markdown(f'<div class="rec {rc}"><div class="rec-lbl">RECOMMENDATION</div><div class="rec-val">{rec["rec"]}</div><div class="rec-tags"><span>Target ₹{rec["tgt"]:.0f} (+{rec["up"]:.0f}%)</span><span>Stop ₹{rec["stop"]:.0f} (-{rec["dn"]:.0f}%)</span></div></div>', unsafe_allow_html=True)
                 
@@ -221,17 +242,17 @@ if sym:
                 with t2:
                     c1,c2 = st.columns(2)
                     with c1:
-                        st.markdown("##### Indicators")
+                        st.markdown("#### Indicators")
                         rsi = tech["rsi"]
                         rt = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
                         st.markdown("RSI: <span class='tag " + rt + "'>" + str(round(rsi)) + "</span>", unsafe_allow_html=True)
                         mt = "bull" if tech["macd"] > tech["macd_s"] else "bear"
-                        st.markdown("MACD: <span class='tag " + mt + "'>" + ("Bull" if tech["macd"] > tech["macd_s"] else "Bear") + "</span>", unsafe_allow_html=True)
-                        st.markdown(f"MA20: ₹{tech['m20']:.0f}")
-                        st.markdown(f"MA50: ₹{tech['m50']:.0f}")
-                        if tech["m200"]: st.markdown(f"MA200: ₹{tech['m200']:.0f}")
+                        st.markdown("MACD: <span class='tag " + mt + "'>" + ("Bullish" if tech["macd"] > tech["macd_s"] else "Bearish") + "</span>", unsafe_allow_html=True)
+                        st.markdown(f"**MA20:** ₹{tech['m20']:.0f}")
+                        st.markdown(f"**MA50:** ₹{tech['m50']:.0f}")
+                        if tech["m200"]: st.markdown(f"**MA200:** ₹{tech['m200']:.0f}")
                     with c2:
-                        st.markdown("##### Signals")
+                        st.markdown("#### Signals")
                         for s,t in rec["sigs"]:
                             ic = "🟢" if t=="bull" else ("🔴" if t=="bear" else "🟡")
                             st.markdown(f"{ic} {s}")
@@ -239,12 +260,12 @@ if sym:
                 with t3:
                     c1,c2 = st.columns(2)
                     with c1:
-                        st.markdown("##### Company")
+                        st.markdown("#### Company")
                         st.markdown(f"**{info.get('longName',sym.upper())}**")
                         st.markdown(f"**Sector:** {info.get('sector','N/A')}")
                         st.markdown(f"**Industry:** {info.get('industry','N/A')}")
                     with c2:
-                        st.markdown("##### Metrics")
+                        st.markdown("#### Metrics")
                         eps = info.get("trailingEps")
                         st.markdown(f"**EPS:** ₹{eps:.2f}" if eps else "**EPS:** N/A")
                         dy = (info.get("dividendYield",0) or 0)*100
@@ -263,6 +284,6 @@ if sym:
             st.error(f"Error: {e}")
 else:
     st.info("Enter a stock symbol above")
-    st.markdown("##### Popular: RELIANCE, TCS, INFY, HDFCBANK, ICICIBANK, SBIN, KOTAKBANK, HUL")
+    st.markdown("#### Popular: RELIANCE, TCS, INFY, HDFCBANK, ICICIBANK, SBIN, KOTAKBANK, HUL")
 
 st.markdown('</div>', unsafe_allow_html=True)

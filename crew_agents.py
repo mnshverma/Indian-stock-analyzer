@@ -13,7 +13,15 @@ load_dotenv()
 
 # Create LLM
 def get_llm():
-    api_key = os.getenv("OPENAI_API_KEY")
+    # Try Streamlit secrets first, then .env
+    api_key = None
+    try:
+        import streamlit as st
+        api_key = st.secrets.get("OPENAI_API_KEY") if hasattr(st, 'secrets') else None
+    except:
+        pass
+    if not api_key:
+        api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
         return None
     return ChatOpenAI(
