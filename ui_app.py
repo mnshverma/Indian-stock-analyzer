@@ -423,12 +423,11 @@ if symbol:
             
             if not tech:
                 st.error(f"No data available for {symbol}. Please check the symbol.")
-                return
-            
-            rec = get_recommendation(tech, info)
-            
-            price = info.get('currentPrice', 0)
-            prev = info.get('previousClose', price)
+            else:
+                rec = get_recommendation(tech, info)
+                
+                price = info.get('currentPrice', 0)
+                prev = info.get('previousClose', price)
             change = ((price - prev) / prev * 100) if prev else 0
             change_class = "pos" if change >= 0 else "neg"
             
