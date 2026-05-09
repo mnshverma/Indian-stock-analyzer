@@ -14,9 +14,8 @@ st.markdown("""
 <style>
     * { font-family: Arial, sans-serif; }
     .block-container { padding: 0.5rem !important; }
-    .header { background: linear-gradient(135deg, #1a237e, #3949ab); padding: 0.75rem; border-radius: 8px; color: white; margin-bottom: 0.5rem; text-align: center; }
-    .header h1 { font-size: 1.3rem; font-weight: 700; margin: 0; }
-    .header p { font-size: 0.75rem; opacity: 0.9; }
+    .logo { text-align: center; margin-bottom: 0.5rem; }
+    .logo img { height: 50px; }
     .search-box { display: flex; gap: 0.5rem; padding: 0.5rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; }
     .search-box input { flex: 1; padding: 0.6rem; border-radius: 6px; border: 1px solid #ddd; font-size: 1rem; }
     .search-box button { padding: 0.6rem 1.2rem; background: #1a237e; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
@@ -156,7 +155,7 @@ def fmt(v):
     return f"₹{v:,.0f}"
 
 
-st.markdown('<div class="header"><h1>🧠 Manver IQ</h1><p>Smart Stock Analysis | NSE/BSE</p></div>')
+st.markdown('<div class="logo"><img src="manver_logo.png" alt="Manver"></div>')
 
 # Search with button
 with st.form("search_form"):
