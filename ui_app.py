@@ -8,14 +8,15 @@ import feedparser
 import os
 from dotenv import load_dotenv
 
-st.set_page_config(page_title="Manver IQ", page_icon="🧠", layout="wide")
+st.set_page_config(page_title="Manver Stock Analyzer", page_icon="📈", layout="wide")
+
+st.image("manver_logo.png", width=100)
+st.caption("📈 Smart Stock Analysis | NSE/BSE")
 
 st.markdown("""
 <style>
     * { font-family: Arial, sans-serif; }
     .block-container { padding: 0.5rem !important; }
-    .logo { text-align: center; margin-bottom: 0.5rem; }
-    .logo img { height: 50px; }
     .search-box { display: flex; gap: 0.5rem; padding: 0.5rem; background: white; border-radius: 8px; margin-bottom: 0.5rem; }
     .search-box input { flex: 1; padding: 0.6rem; border-radius: 6px; border: 1px solid #ddd; font-size: 1rem; }
     .search-box button { padding: 0.6rem 1.2rem; background: #1a237e; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
@@ -155,13 +156,10 @@ def fmt(v):
     return f"₹{v:,.0f}"
 
 
-st.image("manver_logo.png", width=150)
-
-# Search with button
 with st.form("search_form"):
     col1, col2 = st.columns([4, 1])
     with col1:
-        sym = st.text_input("", placeholder="Enter stock (e.g. RELIANCE, TCS...)", label_visibility="collapsed", key="s")
+        sym = st.text_input("", placeholder="Search stock (e.g. RELIANCE, TCS...)", label_visibility="collapsed", key="s")
     with col2:
         submitted = st.form_submit_button("🔍 Search")
 
@@ -222,5 +220,5 @@ if sym:
         except Exception as e:
             st.error(f"Error: {e}")
 else:
-    st.info("Enter a stock symbol above")
+    st.info("Enter a stock symbol to analyze")
     st.markdown("**Popular:** RELIANCE, TCS, INFY, HDFCBANK, ICICIBANK, SBIN")
