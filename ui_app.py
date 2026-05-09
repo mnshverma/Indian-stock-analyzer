@@ -4,9 +4,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import requests
 import feedparser
-import json
 
 st.set_page_config(page_title="Manver IQ", page_icon="🧠", layout="wide")
 
@@ -66,6 +64,10 @@ st.markdown("""
     .cols { display: flex; gap: 0.5rem; }
     .col { flex: 1; }
     .col h4 { font-size: 0.8rem; font-weight: 600; color: #333; margin: 0 0 0.4rem 0; }
+    
+    .crew-status { padding: 0.5rem; border-radius: 6px; text-align: center; margin-bottom: 0.5rem; }
+    .crew-status.ready { background: #e8f5e9; border: 1px solid #4caf50; }
+    .crew-status.no-key { background: #fff3e0; border: 1px solid #ff9800; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -92,17 +94,6 @@ def get_news(sym):
     except:
         pass
     
-    if not news:
-        try:
-            feed = feedparser.parse(f"https://news.moneycontrol.com/rss/searchfeed/SECTIONS_{sym_c}", timeout=8)
-            for e in feed.entries[:6]:
-                t = e.get("title", "")
-                if t and len(t) > 15 and t.lower() not in seen:
-                    seen.add(t.lower())
-                    news.append({"title": t, "source": "Moneycontrol"})
-        except:
-            pass
-    
     return news[:10]
 
 
@@ -114,7 +105,8 @@ def get_tech(hist):
     d = c.diff()
     g = d.where(d > 0, 0).ewm(span=14, adjust=False).mean()
     l = (-d.where(d < 0, 0)).ewm(span=14, adjust=False).mean()
-    rsi = 100 - (100 / (1 + (g / l)))
+    rs = g / l
+    rsi = 100 - (100 / (1 + rs))
     
     e12 = c.ewm(span=12).mean()
     e26 = c.ewm(span=26).mean()
@@ -130,7 +122,9 @@ def get_tech(hist):
         "macd": macd.iloc[-1] if len(macd) > 0 else 0,
         "macd_s": macd_s.iloc[-1] if len(macd_s) > 0 else 0,
         "m20": m20, "m50": m50, "m200": m200,
-        "price": c.iloc[-1]
+        "price": c.iloc[-1],
+        "close": c,
+        "volume": hist["Volume"]
     }
 
 
@@ -155,6 +149,27 @@ def get_rec(tech):
     stop = tech["price"] * (0.93 if rec == "SELL" else 0.95)
     
     return {"rec": rec, "sigs": sigs, "tgt": tgt, "stop": stop, "up": ((tgt-tech["price"])/tech["price"])*100, "dn": ((tech["price"]-stop)/tech["price"])*100}
+
+
+def run_crewai_analysis(sym):
+    """Run CrewAI deep analysis"""
+    try:
+        import os
+        from dotenv import load_dotenv
+        load_dotenv()
+        
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            return None, "No OpenAI API key found. Set OPENAI_API_KEY in .env to enable CrewAI."
+        
+        from stock_analysis_crew import create_stock_analysis_crew
+        
+        crew = create_stock_analysis_crew(sym)
+        result = crew.run_analysis()
+        
+        return result, "CrewAI analysis complete!"
+    except Exception as e:
+        return None, f"CrewAI Error: {str(e)}"
 
 
 def make_chart(tech, period="1y"):
@@ -188,7 +203,7 @@ def fmt(v):
 # === MAIN ===
 st.markdown('<div style="max-width:1100px;margin:0 auto;">', unsafe_allow_html=True)
 
-st.markdown('<div class="header"><h1>🧠 Manver IQ</h1><p>Smart Stock Analysis | NSE/BSE</p></div>', unsafe_allow_html=True)
+st.markdown('<div class="header"><h1>🧠 Manver IQ</h1><p>Smart Stock Analysis | NSE/BSE | Powered by CrewAI</p></div>', unsafe_allow_html=True)
 
 st.markdown('<div class="search">', unsafe_allow_html=True)
 sym = st.text_input("Stock Symbol", placeholder="RELIANCE, TCS, HDFCBANK...", key="s")
@@ -196,6 +211,27 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 if sym:
     st.caption(f"Analyzing {sym.upper()}...")
+    
+    # Check CrewAI status
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    has_api_key = bool(os.getenv("OPENAI_API_KEY"))
+    
+    if has_api_key:
+        st.markdown('<div class="crew-status ready">🤖 CrewAI: Ready (Deep Analysis Available)</div>', unsafe_allow_html=True)
+        if st.button("🚀 Run Deep CrewAI Analysis"):
+            with st.spinner("Running CrewAI agents..."):
+                crew_result, crew_msg = run_crewai_analysis(sym)
+                if crew_result:
+                    st.success(crew_msg)
+                    st.markdown("### CrewAI Analysis Result:")
+                    st.write(crew_result.get("result", crew_msg))
+                else:
+                    st.warning(crew_msg)
+    else:
+        st.markdown('<div class="crew-status no-key">🤖 CrewAI: API Key Required - Using Quick Analysis</div>', unsafe_allow_html=True)
+    
     try:
         info, hist = get_stock(sym)
         tech = get_tech(hist)
@@ -247,9 +283,9 @@ if sym:
                     st.markdown("##### Indicators")
                     rsi = tech["rsi"]
                     rt = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
-                    st.markdown(f"RSI: <span class='tag {rt}'>{rsi:.0f}</span>", unsafe_allow_html=True)
+                    st.markdown("RSI: <span class='tag " + rt + "'>" + str(round(rsi)) + "</span>", unsafe_allow_html=True)
                     mt = "bull" if tech["macd"] > tech["macd_s"] else "bear"
-                    st.markdown(f"MACD: <span class='tag {mt}'>{'Bull' if tech['macd']>tech['macd_s'] else 'Bear'}</span>", unsafe_allow_html=True)
+                    st.markdown("MACD: <span class='tag " + mt + "'>" + ("Bull" if tech["macd"] > tech["macd_s"] else "Bear") + "</span>", unsafe_allow_html=True)
                     st.markdown(f"MA20: ₹{tech['m20']:.0f}")
                     st.markdown(f"MA50: ₹{tech['m50']:.0f}")
                     if tech["m200"]: st.markdown(f"MA200: ₹{tech['m200']:.0f}")
@@ -277,15 +313,9 @@ if sym:
             with t4:
                 if news:
                     for n in news:
-                        st.markdown(f"""
-                        <div class="news">
-                            <div class="news-t">" + n['title'] + "</div>
-                            <div class="news-s">{n['source']}</div>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown("<div class='news'><div class='news-t'>" + n["title"] + "</div><div class='news-s'>" + n["source"] + "</div></div>", unsafe_allow_html=True)
                 else:
-                    st.warning("No news found. Try manually:")
-                    st.markdown(f"[Moneycontrol {sym.upper()}](https://www.moneycontrol.com/stocks/cp_search/?search={sym.upper()})")
+                    st.warning("No news found.")
             
             st.caption("⚠️ Not financial advice.")
             
