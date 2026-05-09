@@ -57,6 +57,9 @@ st.markdown("""
     .tag.bull { background: #c8e6c9; color: #2e7d32; }
     .tag.bear { background: #ffcdd2; color: #c62828; }
     .ai-box { background: #e3f2fd; padding: 0.4rem; border-radius: 5px; margin-bottom: 0.4rem; border: 1px solid #1976d2; }
+    .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown strong { font-size: 0.85rem; }
+    .stTabs [data-baseweb="tab-list"] { gap: 0.5rem; }
+    .stTabs [data-baseweb="tab"] { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
     @media (max-width: 600px) {
         * { font-size: 10px; }
     }
