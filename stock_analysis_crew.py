@@ -294,7 +294,7 @@ class StockAnalysisCrew:
             process=process,
             manager_agent=self.agents['strategist'],
             verbose=True,
-            memory=True
+            memory=False
         )
         
         return self.crew
