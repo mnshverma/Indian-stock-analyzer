@@ -40,8 +40,9 @@ st.markdown("""
     .search-box input { font-size: 0.85rem; }
     h1, h2, h3 { font-size: 1rem; }
     p, small { font-size: 11px; }
-</style>
-""", unsafe_allow_html=True)
+    .rec { padding: 0.5rem; border-radius: 6px; text-align: center; margin-bottom: 0.5rem; }
+    .rec.buy { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; }
+    .rec.sell { background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #f44336; }
     .rec.hold { background: linear-gradient(135deg, #fff8e1, #ffecb3); border: 2px solid #ffc107; }
     .rec-val { font-size: 1rem; font-weight: 700; }
     .rec.buy .rec-val { color: #2e7d32; }
