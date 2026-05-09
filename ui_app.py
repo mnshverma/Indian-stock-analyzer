@@ -17,14 +17,13 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<div style='margin-top: 0.5rem;'></div>", unsafe_allow_html=True)
-
-col1, col2 = st.columns([1, 4])
-with col1:
-    st.image("manver_logo.png", width=70)
-with col2:
-    st.markdown("**Manver IQ**")
-    st.caption("Smart Stock Analysis")
+st.markdown("""
+<style>
+    .app-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .app-header h1 { color: #1a237e; margin: 0; }
+</style>
+<div class="app-header"><h1>Manver IQ</h1></div>
+""", unsafe_allow_html=True)
 
 col_s1, col_s2 = st.columns([5, 1])
 with col_s1:
