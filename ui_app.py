@@ -12,30 +12,24 @@ st.set_page_config(page_title="Manver IQ", page_icon="📈", layout="wide")
 
 st.markdown("""
 <style>
-    .top-bar { display: flex; align-items: center; gap: 1rem; padding: 0.5rem 1rem; background: linear-gradient(135deg, #1a237e, #3949ab); border-radius: 8px; margin-bottom: 0.75rem; }
-    .top-bar .logo { width: 60px; }
-    .top-bar .title { color: white; }
-    .top-bar .title h1 { margin: 0; font-size: 1.5rem; }
-    .top-bar .title small { color: #ccc; }
-    .top-bar .search { flex: 1; max-width: 300px; }
-    .top-bar .search input { width: 100%; padding: 0.5rem; border-radius: 4px; border: none; font-size: 0.9rem; }
-    .top-bar .search button { padding: 0.5rem 1rem; background: #ffc107; color: #333; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-    @media (max-width: 600px) { .top-bar { flex-direction: column; text-align: center; } .top-bar .search { width: 100%; max-width: 100%; } }
+    .block-container { padding: 0.5rem !important; }
+    .search-box input { font-size: 1rem; }
 </style>
 """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([1, 3, 4])
+col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("manver_logo.png", width=60)
+    st.image("manver_logo.png", width=80)
 with col2:
-    st.markdown("<div class='title'><h1>Manver IQ</h1><small>Smart Stock Analysis</small></div>", unsafe_allow_html=True)
-with col3:
-    with st.form("search_form"):
-        c1, c2 = st.columns([4, 1])
-        with c1:
-            sym = st.text_input("", placeholder="Search (RELIANCE, TCS...)", label_visibility="collapsed", key="s")
-        with c2:
-            submitted = st.form_submit_button("🔍")
+    st.markdown("### Manver IQ")
+    st.caption("Smart Stock Analysis")
+
+with st.form("search_form"):
+    col_s1, col_s2 = st.columns([5, 1])
+    with col_s1:
+        sym = st.text_input("", placeholder="Search stock (RELIANCE, TCS...)", label_visibility="collapsed", key="s")
+    with col_s2:
+        submitted = st.form_submit_button("🔍 Search")
 
 st.markdown("""
 <style>
