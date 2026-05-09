@@ -17,18 +17,20 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("<div style='margin-top: 0.5rem;'></div>", unsafe_allow_html=True)
+
 col1, col2 = st.columns([1, 4])
 with col1:
-    st.image("manver_logo.png", width=80)
+    st.image("manver_logo.png", width=70)
 with col2:
-    st.markdown("### Manver IQ")
+    st.markdown("**Manver IQ**")
     st.caption("Smart Stock Analysis")
 
 col_s1, col_s2 = st.columns([5, 1])
 with col_s1:
     sym = st.text_input("", placeholder="Search stock (RELIANCE, TCS...)", label_visibility="collapsed", key="s")
 with col_s2:
-    submitted = st.button("🔍 Search")
+    submitted = st.button("🔍")
 
 st.markdown("""
 <style>
