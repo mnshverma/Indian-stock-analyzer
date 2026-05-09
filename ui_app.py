@@ -12,10 +12,10 @@ st.set_page_config(page_title="Manver IQ", page_icon="📈", layout="wide")
 
 col_logo, col_title = st.columns([1, 2])
 with col_logo:
-    st.image("manver_logo.png", use_container_width=True)
+    st.image("manver_logo.png", width=100)
 with col_title:
     st.markdown("<h1 style='margin-top:20px; color:#1a237e;'>Manver IQ</h1>", unsafe_allow_html=True)
-    st.markdown("<small style='color:#666;'>Smart Stock Analysis | NSE/BSE</small>", unsafe_allow_html=True)
+    st.markdown("<small style='color:#666;'>Smart Stock Analysis</small>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
