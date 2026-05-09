@@ -17,17 +17,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-    .app-header { display: flex; align-items: center; gap: 0.5rem; margin: 0.5rem 0; }
-    .app-header h1 { color: #1a237e; margin: 0; }
-    .app-header img { width: 40px; height: 40px; }
-</style>
-<div class="app-header">
-    <img src="manver_logo.png" alt="Logo">
-    <h1>Manver IQ</h1>
-</div>
-""", unsafe_allow_html=True)
+col1, col2 = st.columns([1, 4])
+with col1:
+    st.image("manver_logo.png", width=40)
+with col2:
+    st.markdown("<h1 style='margin:0; color:#1a237e;'>Manver IQ</h1>", unsafe_allow_html=True)
 
 col_s1, col_s2 = st.columns([5, 1])
 with col_s1:
