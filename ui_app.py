@@ -15,7 +15,7 @@ with col_logo:
     st.image("manver_logo.png", use_container_width=True)
 with col_title:
     st.markdown("<h1 style='margin-top:20px; color:#1a237e;'>Manver IQ</h1>", unsafe_allow_html=True)
-st.caption("📈 Smart Stock Analysis | NSE/BSE")
+    st.markdown("<small style='color:#666;'>Smart Stock Analysis | NSE/BSE</small>", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
