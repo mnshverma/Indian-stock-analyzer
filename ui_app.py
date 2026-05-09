@@ -207,8 +207,38 @@ if sym:
                 rsi = tech["rsi"]
                 rt = "bull" if rsi < 30 else ("bear" if rsi > 70 else "neut")
                 mt = "bull" if tech["macd"] > tech["macd_s"] else "bear"
+                st.markdown(f"**Indicators**")
                 st.markdown(f"RSI: <span class='tag {rt}'>{rsi:.0f}</span> MACD: <span class='tag {mt}'>{'Bull' if tech['macd'] > tech['macd_s'] else 'Bear'}</span>", unsafe_allow_html=True)
                 st.markdown(f"MA20: ₹{tech['m20']:.0f} | MA50: ₹{tech['m50']:.0f}" + (f" | MA200: ₹{tech['m200']:.0f}" if tech["m200"] else ""))
+                
+                st.markdown("---")
+                st.markdown("**Fundamentals**")
+                mc = info.get("marketCap", 0)
+                st.metric("Mkt Cap", fmt(mc))
+                pe = info.get("trailingPE")
+                pb = info.get("priceToBook")
+                ps = info.get("priceToSalesTrailing12Months")
+                st.metric("P/E", f"{pe:.1f}" if pe else "N/A")
+                st.metric("P/B", f"{pb:.1f}" if pb else "N/A")
+                st.metric("P/S", f"{ps:.1f}" if ps else "N/A")
+                
+                st.markdown("---")
+                st.markdown("**Ownership**")
+                roe = info.get("returnOnEquity")
+                roa = info.get("returnOnAssets")
+                de = info.get("debtToEquity")
+                st.metric("ROE", f"{(roe or 0)*100:.1f}%" if roe else "N/A")
+                st.metric("ROA", f"{(roa or 0)*100:.1f}%" if roa else "N/A")
+                st.metric("D/E", f"{de:.1f}" if de else "N/A")
+                
+                st.markdown("---")
+                st.markdown("**Valuation**")
+                eps = info.get("trailingEps")
+                bv = info.get("bookValue")
+                dy = info.get("dividendYield")
+                st.metric("EPS", f"₹{eps:.2f}" if eps else "N/A")
+                st.metric("Book Value", f"₹{bv:.2f}" if bv else "N/A")
+                st.metric("Div Yield", f"{(dy or 0)*100:.1f}%" if dy else "N/A")
             with t3:
                 st.markdown(f"**{info.get('longName', sym.upper())}**")
                 st.markdown(f"Sector: {info.get('sector', 'N/A')}")
